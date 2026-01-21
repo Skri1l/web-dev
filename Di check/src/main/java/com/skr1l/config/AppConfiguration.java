@@ -1,15 +1,17 @@
 package com.skr1l.config;
 
+import com.skr1l.lifecycle.LifecycleBean;
+import com.skr1l.prototype.RequestIdHolder;
 import com.skr1l.repository.FileBeverageRepository;
 import com.skr1l.repository.JDBCBeverageRepository;
 import com.skr1l.service.BeverageService;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import com.skr1l.repository.BeverageRepository;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
+@ComponentScan("com.skr1l")
 @PropertySource("classpath:application.properties")
 public class AppConfiguration {
 
@@ -18,7 +20,7 @@ public class AppConfiguration {
 
     @Bean
     public BeverageRepository beverageRepository(){
-        if ("jdbc".equals(repoType)) {
+        if ("jdbc".equalsIgnoreCase(repoType)) {
             return new JDBCBeverageRepository();
         }
         return new FileBeverageRepository();
@@ -28,4 +30,16 @@ public class AppConfiguration {
     public BeverageService beverageService(BeverageRepository repository){
         return new BeverageService(repository);
     }
+
+    @Bean
+    @Scope("prototype")
+    public RequestIdHolder requestIdHolder() {
+        return new RequestIdHolder();
+    }
+
+    @Bean(initMethod = "init", destroyMethod = "destroy")
+    public LifecycleBean lifecycleBean() {
+        return new LifecycleBean();
+    }
+
 }

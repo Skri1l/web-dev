@@ -1,21 +1,40 @@
 package com.skr1l.service;
 
+import com.skr1l.dto.BeverageRequestDto;
+import com.skr1l.exception.ConflictException;
+import com.skr1l.exception.NotFoundException;
+import com.skr1l.exception.RandomDeleteException;
+import com.skr1l.model.Beverage;
 import com.skr1l.repository.BeverageRepository;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.context.annotation.Bean;
 
+import java.util.List;
 
 public class BeverageService {
 
-    private static final Log log = LogFactory.getLog(BeverageService.class);
     private final BeverageRepository repository;
 
-    public BeverageService (BeverageRepository repository) {
+    public BeverageService(BeverageRepository repository) {
         this.repository = repository;
     }
 
-    public void getRepository() {
-        log.info("we use - " + repository.getSourceName());
+    public List<Beverage> getAll() {
+        return repository.findAll(); // [] если пусто → 200 OK
+    }
+
+    public Beverage create(BeverageRequestDto dto) {
+        if (repository.existsByName(dto.getName())) {
+            throw new ConflictException("Beverage already exists");
+        }
+
+        return repository.save(new Beverage(null, dto.getName(), dto.getPrice()));
+    }
+
+    public void delete(Long id) {
+        if (Math.random() < 0.5) {
+            throw new RandomDeleteException("Random failure during delete");
+        }
+        Beverage beverage = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Beverage not found with id " + id));
+        repository.deleteById(id);
     }
 }
