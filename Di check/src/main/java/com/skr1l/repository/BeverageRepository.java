@@ -1,6 +1,7 @@
 package com.skr1l.repository;
 
 import com.skr1l.model.Beverage;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;

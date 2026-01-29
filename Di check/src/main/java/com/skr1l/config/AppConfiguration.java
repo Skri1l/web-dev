@@ -11,11 +11,9 @@ import org.springframework.context.annotation.*;
 import com.skr1l.repository.BeverageRepository;
 
 @Configuration
-@ComponentScan("com.skr1l")
-@PropertySource("classpath:application.properties")
 public class AppConfiguration {
 
-    @Value("${repository.type}")
+    @Value("file")
     private String repoType;
 
     @Bean

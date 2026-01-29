@@ -6,9 +6,10 @@ import com.skr1l.exception.NotFoundException;
 import com.skr1l.exception.RandomDeleteException;
 import com.skr1l.model.Beverage;
 import com.skr1l.repository.BeverageRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class BeverageService {
 
     private final BeverageRepository repository;
@@ -18,7 +19,7 @@ public class BeverageService {
     }
 
     public List<Beverage> getAll() {
-        return repository.findAll(); // [] если пусто → 200 OK
+        return repository.findAll(); // [] если пусто - 200
     }
 
     public Beverage create(BeverageRequestDto dto) {

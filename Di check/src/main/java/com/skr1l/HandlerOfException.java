@@ -16,24 +16,24 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+@RestControllerAdvice//создали централизованный ExceptionHandler
 public class HandlerOfException {
 
     private static final Log log = LogFactory.getLog(HandlerOfException.class);
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)// обрабатываем ошибки валидации входящих данных
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex
     ) {
-        List<String> errors = ex.getBindingResult()
+        List<String> errors = ex.getBindingResult()//получаем всю информацию об ошибке
                 .getFieldErrors()
                 .stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
                 .collect(Collectors.toList());
 
-        log.warn("HTTP 400 BAD_REQUEST – validation error");
+        log.warn("HTTP 400 BAD_REQUEST – validation error");// логируем ошибку в консоль
 
-        return ResponseEntity
+        return ResponseEntity//возвращаем информациб об ошибке
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorResponse(

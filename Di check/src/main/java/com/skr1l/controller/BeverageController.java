@@ -4,7 +4,7 @@ import com.skr1l.dto.BeverageRequestDto;
 import com.skr1l.model.Beverage;
 import com.skr1l.service.BeverageService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class BeverageController {
 
     @GetMapping
     public List<Beverage> getAll() {
-        return service.getAll(); // 200 + []
+        return service.getAll(); // 200
     }
 
     @PostMapping
@@ -31,6 +31,7 @@ public class BeverageController {
     public Beverage create(@Valid @RequestBody BeverageRequestDto dto) {
         return service.create(dto);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
