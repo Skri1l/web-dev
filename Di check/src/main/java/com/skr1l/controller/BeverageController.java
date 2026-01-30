@@ -32,6 +32,10 @@ public class BeverageController {
         return service.create(dto);
     }
 
+    @PutMapping("/{id}")
+    public Beverage update(@PathVariable Long id, @Valid @RequestBody BeverageRequestDto dto) {
+        return service.update(id,dto);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

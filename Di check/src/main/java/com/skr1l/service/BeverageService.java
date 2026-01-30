@@ -22,12 +22,29 @@ public class BeverageService {
         return repository.findAll(); // [] если пусто - 200
     }
 
-    public Beverage create(BeverageRequestDto dto) {
-        if (repository.existsByName(dto.getName())) {
+    public void validateUniqueName(String name){
+        boolean exists = repository.findAll().stream()
+                .anyMatch(beverage -> beverage.getName().equalsIgnoreCase(name));
+        if (exists){
             throw new ConflictException("Beverage already exists");
         }
+    }
 
+    public Beverage create(BeverageRequestDto dto) {
+        validateUniqueName(dto.getName());
         return repository.save(new Beverage(null, dto.getName(), dto.getPrice()));
+    }
+
+    public Beverage update(Long id, BeverageRequestDto dto) {
+        repository.findById(id).orElseThrow(() -> new NotFoundException("Beverage not found"));
+        boolean nameExists = repository.findAll().stream()
+                .anyMatch(beverage -> beverage.getName().equalsIgnoreCase(dto.getName())
+                && beverage.getId().equals(id));
+        if (nameExists){
+            throw new ConflictException("Beverage already exists");
+        }
+        Beverage beverageToUpdate = new Beverage(id, dto.getName(), dto.getPrice());
+        return repository.update(beverageToUpdate);
     }
 
     public void delete(Long id) {

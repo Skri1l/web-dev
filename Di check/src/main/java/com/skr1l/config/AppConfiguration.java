@@ -2,7 +2,6 @@ package com.skr1l.config;
 
 import com.skr1l.lifecycle.LifecycleBean;
 import com.skr1l.prototype.RequestIdHolder;
-import com.skr1l.repository.FileBeverageRepository;
 import com.skr1l.repository.JDBCBeverageRepository;
 import com.skr1l.service.BeverageService;
 import org.springframework.beans.factory.ObjectProvider;
@@ -15,14 +14,6 @@ public class AppConfiguration {
 
     @Value("file")
     private String repoType;
-
-    @Bean
-    public BeverageRepository beverageRepository(){
-        if ("jdbc".equalsIgnoreCase(repoType)) {
-            return new JDBCBeverageRepository();
-        }
-        return new FileBeverageRepository();
-    }
 
     @Bean
     public BeverageService beverageService(BeverageRepository repository){

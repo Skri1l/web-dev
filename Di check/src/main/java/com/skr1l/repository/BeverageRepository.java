@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface BeverageRepository {
 
+    Beverage save(Beverage beverage);
+
     List<Beverage> findAll();
 
     Optional<Beverage> findById(Long id);
 
-    boolean existsByName(String name);
-
-    Beverage save(Beverage beverage);
+    Beverage update(Beverage beverage);
 
     void deleteById(Long id);
 }
